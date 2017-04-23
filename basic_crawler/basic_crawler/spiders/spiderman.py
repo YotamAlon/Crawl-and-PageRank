@@ -49,7 +49,7 @@ class MySpider(Spider):
 				if not link in visited_links:
 					print('Processing link: ' + link)
 					visited_links.append(link)
-					dbentry = {'link':link, 'refs':[url]}
+					dbentry = {'url':url, 'refs':[link]}
 					res = db.insert_one(dbentry)
 				
 					if not res:
@@ -57,9 +57,9 @@ class MySpider(Spider):
 					yield Request(link, callback=self.parse)
 					
 				else:
-					dbentry = db.find_one({'link':link})
+					dbentry = db.find_one({'url':url})
 					if dbentry:
-						refs = list(set(dbentry['refs'] + [url]))
-						db.update_one({'link':link}, {'$set':{'refs':refs}})
+						refs = list(set(dbentry['refs'] + [link]))
+						db.update_one({'url':url}, {'$set':{'refs':refs}})
 					else:
 						print('Was not able to find visited entry: ' + link)
