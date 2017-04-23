@@ -1,0 +1,1 @@
+scrapy crawl basic_crawler -o results.json -t json
