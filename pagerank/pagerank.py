@@ -1,19 +1,26 @@
 import numpy
 from pymongo import MongoClient
+from pprint import pprint
 
 global db
 db = MongoClient().db.links
 if not db:
-	print('Connected to DB')
+	pprint('Connected to DB')
 
-items = db.find({})
+cursor = db.find()
+items = []
+for item in cursor:
+	items.append(item)
+
 
 size = len(items)
+print("We have " + str(size) + " items to handle")
+
 prematrix = [[]] * size
 for i in range(size):
-	prematrix[i]= [1/len(item.refs) for j in range(size) if (items[j].url in item.refs) else 0]
+	print(i)
+	prematrix[i]= [1/len(items[i]['refs']) if (items[j]['url'] in items[i]['refs']) else 0 for j in range(size) ]
 
-print("Prematrix array:\n" +'\n'.join(prematrix))
 matrix = numpy.matrix(prematrix)
 
 

@@ -27,9 +27,9 @@ class MySpider(Spider):
 		global visited_links
 		hxs = Selector(response)
 		url = response.url
-		exist = db.find_one({'link':url})
+		exist = db.find_one({'url':url})
 		if not exist:
-			res = db.insert_one({'link':url, 'refs':[]})
+			res = db.insert_one({'url':url, 'refs':[]})
 			if not res.acknowledged:
 				print('Initial insert unsuccesfull')
 		
